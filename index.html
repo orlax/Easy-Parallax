@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Parallax zelda</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/p5.min.js"></script>
+    <script>
+        //image variables. 
+        var bg, shrine, heroe, princess, tree, leaf; 
+        
+        let w, h; 
+
+
+        function preload(){
+            bg = loadImage("images/bg.png"); 
+            heroe = loadImage("images/heroe.png" , (img) => { scale(img, heroe) });
+            princess = loadImage("images/princess.png" , (img) => { scale(img, princess) });
+            tree = loadImage("images/tree.png" , (img) => { scale(img, tree) });
+            shrine = loadImage("images/shrine.png" , (img) => { scale(img, shrine) }); 
+            leaf = loadImage("images/leafs.png" , (img) => { scale(img, leaf) });
+
+             function scale(img, target){
+                var aspectRatio = img.height/img.width; 
+                console.log(`aspect ratio is: ${aspectRatio}`)
+                target.aspectRatio = aspectRatio; 
+            }
+        }
+
+        function setup(){
+            w = windowWidth; 
+            h = windowHeight; 
+            createCanvas(w-40, h-40);
+        }
+
+        function draw(){
+            background(0); 
+            image(bg, 0,0,w-40, h-40 ); //fondo
+            PlaceImage(tree,.35,0,.40, .05); 
+            PlaceImage(princess, .3, .5, .07, .1 ,fromBottom=true); 
+            PlaceImage(shrine, .2, .30, .55,.18, fromBottom=true); 
+            PlaceImage(heroe, .50,.0, .30,.45,fromBottom=true); //heroe 
+            PlaceImage(leaf, 0,0,1,1)//hojas primer plano 
+        }
+
+        function PlaceImage(img, x,y,iw, z, fromBottom = false ){
+
+            let yPos = h*y; 
+            let xPos = w*x; 
+            let width =  w*iw; 
+            let height = w*iw*img.aspectRatio; 
+
+            if(fromBottom) yPos = h-(w*iw*img.aspectRatio)-(y*h);
+
+            //parallax for xPos
+            let parallaxXAmount = .5*w*z; 
+            let parallaxYAmount = .3*h*z; 
+            
+            let parallaxX = (.5- (mouseX * 1 / w));
+            let parallaxY = (.5- (mouseY * 1 / h));
+
+            if(rotationX){
+                parallaxX = (rotationX / 360)*5;
+            }
+
+            if(rotationY){
+                parallaxY = (rotationY / 360)*3;
+            }
+
+            xPos += parallaxXAmount*parallaxX; 
+            yPos += parallaxYAmount*parallaxY; 
+
+            
+            image(img, xPos , yPos , width, height );
+
+        }
+
+       
+
+    </script>
+    <style>
+        body{
+            margin: 0px; 
+            overflow: hidden;
+        }
+        canvas{
+            border-radius: 20px;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    
+</body>
+</html>
