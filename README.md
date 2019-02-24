@@ -1,7 +1,7 @@
 # Easy Parallax 
 Easy parallax is a small library for making illustations with a parallax effect, you can check a demo in my  [The legend of zelda parallax illustration](https://orla.games/zelda)
 
-It uses [p5.js](https://p5js.org/) funcitonality for loading images and rendering the canvas, the way it works right now is very easy, checkout the index.html for a code example. 
+It uses [p5.js](https://p5js.org/) funcitonality for loading images and rendering the canvas, it draws images layers and move them based on mouse position when on desktop and device rotation on mobile devices, checkout the index.html for a code example. 
 
 ## How to use it:
 
@@ -51,6 +51,7 @@ the layers object has properties that are your layer objects, you can name this 
 - **x** : the image x position relative to the left of the canvas, 0 is 0%, 1 is 100%  
 - **y** : the image location relative to the top of the canvas, 0 is 0%, 1 is 100%  
 - **w** : the width of image relative to the width of the canvas, 0 is 0%, 1 is 100%.
+- **z** : the amount of movement it will have based on mouse/device rotation, 1 or greater is a lot of movement, 0 is no movement at all
 - **fromBottom**: optional, if true the y position is calculated relative to the bottom of the canvas
 
 
@@ -62,8 +63,8 @@ the order your layers are drawn is from the firs property to the last one, so ob
 This is something i made for fun after watching something similar on twitter, i am thinking about keep to work on this Easy_parallax script to make it really straight forward to use and create more illustrations like this on the web. 
 
 things that i am thinking on doing: 
-
-- Making a UI tool for positioning images/layers that doesnt require writing code (will probably be a paid thing)
+- Improve device rotation information handeling, it is very limited right now. 
+- Making a UI tool for positioning images/layers that doesnt require writing code and is more frienlier to illustrators. (will probably be a paid thing)
 - makin tests to be sure you can put many parallax illustrations on the same page. 
 - adding animation capabilities 
 - supporting "scrolling" inside the illustration. 
