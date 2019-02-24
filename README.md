@@ -1,11 +1,11 @@
 # Easy Parallax 
 Easy parallax is a small library for making illustations with a parallax effect, you can check a demo in my  [The legend of zelda parallax illustration](https://orla.games/zelda)
 
-the way it works right now is very easy, checkout the index.html for a code example. 
+It uses [p5.js](https://p5js.org/) funcitonality for loading images and rendering the canvas, the way it works right now is very easy, checkout the index.html for a code example. 
 
 ## How to use it:
 
-1. load p5.js library on your file. 
+1. load p5.js library on your file. **cdn**: https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/p5.min.js
 2. load easy_parallax.js on your file 
 3. add a container for the canvas element that will be created for your illustration, for example: 
 
