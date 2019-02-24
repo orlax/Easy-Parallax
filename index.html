@@ -5,92 +5,251 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Parallax zelda</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/p5.min.js"></script>
-    <script>
-        //image variables. 
-        var bg, shrine, heroe, princess, tree, leaf; 
-        
-        let w, h; 
-
-
-        function preload(){
-            bg = loadImage("images/bg.png"); 
-            heroe = loadImage("images/heroe.png" , (img) => { scale(img, heroe) });
-            princess = loadImage("images/princess.png" , (img) => { scale(img, princess) });
-            tree = loadImage("images/tree.png" , (img) => { scale(img, tree) });
-            shrine = loadImage("images/shrine.png" , (img) => { scale(img, shrine) }); 
-            leaf = loadImage("images/leafs.png" , (img) => { scale(img, leaf) });
-
-             function scale(img, target){
-                var aspectRatio = img.height/img.width; 
-                console.log(`aspect ratio is: ${aspectRatio}`)
-                target.aspectRatio = aspectRatio; 
-            }
-        }
-
-        function setup(){
-            w = windowWidth; 
-            h = windowHeight; 
-            createCanvas(w-40, h-40);
-        }
-
-        function draw(){
-            background(0); 
-            image(bg, 0,0,w-40, h-40 ); //fondo
-            PlaceImage(tree,.35,0,.40, .05); 
-            PlaceImage(princess, .3, .5, .07, .1 ,fromBottom=true); 
-            PlaceImage(shrine, .2, .30, .55,.18, fromBottom=true); 
-            PlaceImage(heroe, .50,.0, .30,.45,fromBottom=true); //heroe 
-            PlaceImage(leaf, 0,0,1,1)//hojas primer plano 
-        }
-
-        function PlaceImage(img, x,y,iw, z, fromBottom = false ){
-
-            let yPos = h*y; 
-            let xPos = w*x; 
-            let width =  w*iw; 
-            let height = w*iw*img.aspectRatio; 
-
-            if(fromBottom) yPos = h-(w*iw*img.aspectRatio)-(y*h);
-
-            //parallax for xPos
-            let parallaxXAmount = .5*w*z; 
-            let parallaxYAmount = .3*h*z; 
-            
-            let parallaxX = (.5- (mouseX * 1 / w));
-            let parallaxY = (.5- (mouseY * 1 / h));
-
-            if(rotationX){
-                parallaxX = (rotationX / 360)*5;
-            }
-
-            if(rotationY){
-                parallaxY = (rotationY / 360)*3;
-            }
-
-            xPos += parallaxXAmount*parallaxX; 
-            yPos += parallaxYAmount*parallaxY; 
-
-            
-            image(img, xPos , yPos , width, height );
-
-        }
-
-       
-
-    </script>
-    <style>
-        body{
-            margin: 0px; 
-            overflow: hidden;
-        }
-        canvas{
-            border-radius: 20px;
-            margin: 20px;
-        }
-    </style>
 </head>
 <body>
+        <div id="zelda-illustration"></div>
+        <div id="zelda-illustration-2"></div>
     
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/p5.min.js"></script>
+        <script src="easy_parallax.js"></script>
+        
+        <style>
+            html, body {
+            height: 100%;
+            }
+    
+            body {
+            margin: 0;
+            display: flex;
+            /* This centers our sketch horizontally. */
+            justify-content: center;
+    
+            /* This centers our sketch vertically. */
+            align-items: center;
+            background: black; 
+            }
+            
+        </style>
+
+        <script>
+        let layers = {
+                //bg bottom
+            "bg_bottom": {
+                src:"img/bg_bottom.png",
+                x: -.15,
+                y:-.16, 
+                w: 1.3, 
+                h:0,
+                z:.1,
+                fromBottom: true
+            },
+            "bg_top": //bg top 
+            {
+                src:"img/bg_top.png",
+                x: -.15,
+                y:-.15, 
+                w: 1.3, 
+                h:0, 
+                z:.05,
+                fromBottom: false
+            },
+            //back_right
+            "back_right": //bg top 
+            {
+                src:"img/back_right.png",
+                w: 0.6,
+                x: 0.45,
+                y: -0.15,
+                z: 0.03,
+                fromBottom: false
+            },
+            //back left
+            "back_left": //bg top 
+            {
+                src:"img/back_left.png",
+                w: 0.9,
+                x: 0,
+                y: -.1,
+                z: 0.04,
+                fromBottom: false
+            },
+
+            "three_back_left": //bg top 
+            {
+                src:"img/three_back_left.png",
+                w: 0.38,
+                x: 0.05,
+                y: -0.1,
+                z: 0.05,
+                fromBottom: false
+            },
+
+            //arbol deku 
+            "deku": {
+                src:"img/deku_three.png",
+                w: 0.53,
+                x: 0.43,
+                y: 0.43,
+                h:0, 
+                z:.07,
+                fromBottom: true
+            },
+            //zelda 
+            "zelda": {
+                src:"img/Princesa.png",
+                w: 0.05,
+                x: 0.72,
+                y: 0.48,
+                h:0, 
+                z:.085,
+                fromBottom: true
+            },
+            //camino 
+            "camino":
+            {
+                src:"img/camino.png",
+                x: .18,
+                y:-.3, 
+                w: .8, 
+                h:0, 
+                z:.1,
+                fromBottom: true
+            },
+            //espada
+            "espada":
+            {
+                src:"img/master_sword.png",
+                w: 0.25,
+                x: 0.53,
+                y: 0.31,
+                h:0, 
+                z:.1,
+                fromBottom: true
+            },
+            "piedras":
+            {
+                src:"img/piedras.png",
+                w: 0.25,
+                x: 0.46,
+                y: 0.26,
+                h:0, 
+                z:.11,
+                fromBottom: true
+            },
+            "details_left":
+            {
+                src:"img/details_left.png",
+                w: 0.28,
+                x: 0.12,
+                y: 0.18,
+                z:.13,
+                fromBottom: true
+            },
+
+            "details_right":
+            {
+                src:"img/details_right.png",
+                w: 0.15,
+                x: 0.72,
+                y: 0.3,
+                z: 0.14,
+                fromBottom: true
+            },
+            
+            "details_right_2":
+            {
+                src:"img/details_right_2.png",
+                w: 0.3,
+                x: 0.76,
+                y: 0.003,
+                z: 0.17,
+                fromBottom: true
+            },
+
+            "rock_detail":
+            {
+                src:"img/rock_detail.png",
+                w: 0.15,
+                x: 0.3,
+                y: 0.23,
+                z: 0.114,
+                fromBottom: true
+            },
+
+            "luces":
+            {
+                src:"img/Ligthsail.png",
+                w: 0.51,
+                x: 0.55,
+                y: -0.2,
+                z: 0.22,
+            },
+
+
+            "poko":
+            {
+                src:"img/poko.png",
+                w: 0.24,
+                x: 0.75,
+                y: -0.1,
+                z: 0.35,
+                fromBottom: false
+            },
+
+            "link":
+            {
+                src:"img/link.png",
+                w: 0.35,
+                x: 0.1,
+                y: -0.1,
+                z: 0.6,
+                fromBottom: true
+            },
+
+            "front_arbusto_left":
+            {
+                src:"img/front_arbusto_left.png",
+                w: 0.35,
+                x: -0.19,
+                y: -0.08,
+                z: 0.6,
+                fromBottom: true
+            },
+
+            "front_arbusto_right":
+            {
+                src:"img/front_arbusto_right.png",
+                w: 0.55,
+                x: 0.63,
+                y: -0.11,
+                z: 0.8,
+                fromBottom: true
+            },
+
+            "front_branch":
+            {
+                src:"img/front_branch.png",
+                w: 0.66,
+                x: -0.3,
+                y: -0.2,
+                z: 0.9,
+            },
+
+            "navi":
+            {
+                src:"img/navi.png",
+                w: 0.32,
+                x: 0.76,
+                y: 0.46,
+                z: 2.4,
+            },
+                    
+
+        }; 
+        
+        let ZeldaParallax = new EasyParallax("zelda-illustration", layers, 2912, 1429); 
+        
+        
+        </script>
 </body>
 </html>
